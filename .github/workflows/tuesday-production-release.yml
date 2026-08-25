@@ -1,0 +1,45 @@
+name: Tuesday production release
+
+on:
+  schedule:
+    - cron: "0 10 * * 2"
+      timezone: "Europe/Paris"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: production-release
+  cancel-in-progress: false
+
+jobs:
+  promote-staging:
+    name: Promote staging to main
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - name: Check out production branch
+        uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
+          ssh-key: ${{ secrets.WEEKLY_RELEASE_SSH_KEY }}
+
+      - name: Merge staging into production
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "CDE Weekly Release"
+          git config user.email "release-bot@users.noreply.github.com"
+          git fetch origin staging
+
+          if git merge-base --is-ancestor origin/staging HEAD; then
+            echo "Production already contains every staging commit."
+            exit 0
+          fi
+
+          git merge --no-ff origin/staging \
+            -m "chore(release): promote staging to production"
+          git push origin HEAD:main
