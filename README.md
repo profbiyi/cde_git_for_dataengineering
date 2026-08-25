@@ -41,7 +41,7 @@ Production releases use a separate pull request from `staging` into `main`.
 
 Every Tuesday at 10:00 in the `Europe/Paris` timezone, GitHub Actions fast-forwards `main` to `staging`. After a release, both branches point to the same commit. If production already contains every staging commit, the workflow exits without creating an empty release commit.
 
-The repository owner, `profbiyi`, may also open a `staging` to `main` pull request at any time and merge it without approvals. Other contributors cannot bypass the production rules.
+The repository owner, `profbiyi`, may also run the production-release workflow manually at any time. Manual runs triggered by other collaborators are skipped. Other contributors cannot bypass the production rules.
 
 ## Rules
 

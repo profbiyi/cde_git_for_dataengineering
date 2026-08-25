@@ -16,6 +16,7 @@ concurrency:
 jobs:
   promote-staging:
     name: Promote staging to main
+    if: github.event_name == 'schedule' || github.actor == 'profbiyi'
     runs-on: ubuntu-latest
     timeout-minutes: 10
 
