@@ -40,6 +40,8 @@ jobs:
             exit 0
           fi
 
-          git merge --no-ff origin/staging \
-            -m "chore(release): promote staging to production"
+          # Keep staging and main on the same commit after every release.
+          # This intentionally fails instead of creating an unexpected merge
+          # when production contains commits that are not in staging.
+          git merge --ff-only origin/staging
           git push origin HEAD:main
