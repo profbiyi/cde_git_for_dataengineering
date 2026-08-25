@@ -1,0 +1,55 @@
+name: SQL validation
+
+on:
+  pull_request:
+    branches:
+      - staging
+    paths:
+      - "SQL/**"
+      - "scripts/run_snowflake_sql.py"
+      - "requirements-ci.txt"
+      - ".github/workflows/sql-validation.yml"
+
+permissions:
+  contents: read
+  pull-requests: write
+
+concurrency:
+  group: sql-validation-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+jobs:
+  validate-sql:
+    name: Validate Snowflake SQL
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      SNOWFLAKE_ACCOUNT: ${{ vars.SNOWFLAKE_ACCOUNT }}
+      SNOWFLAKE_DATABASE: ${{ vars.SNOWFLAKE_DATABASE }}
+      SNOWFLAKE_WAREHOUSE: ${{ vars.SNOWFLAKE_WAREHOUSE }}
+      SNOWFLAKE_USER: ${{ vars.SNOWFLAKE_CI_USER }}
+      SNOWFLAKE_ROLE: ${{ vars.SNOWFLAKE_CI_ROLE }}
+      SNOWFLAKE_PRIVATE_KEY: ${{ secrets.SNOWFLAKE_CI_PRIVATE_KEY }}
+      CI_SCHEMA: CI_PR_${{ github.event.pull_request.number }}_${{ github.run_attempt }}
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      - name: Install Snowflake client
+        run: pip install -r requirements-ci.txt
+
+      - name: Validate all SQL views and tests
+        run: python scripts/run_snowflake_sql.py validate
+
+      - name: Tell the author to choose reviewers
+        if: success()
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh pr comment "${{ github.event.pull_request.number }}" \
+            --body "✅ Snowflake SQL validation passed. Please select two reviewers."

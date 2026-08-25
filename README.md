@@ -52,3 +52,9 @@ The repository owner, `profbiyi`, may also run the production-release workflow m
 - Use small commits with descriptive messages.
 
 See [CONTRIBUTING.md](CONTRIBUTING.md) for the complete workflow.
+
+## Snowflake SQL workflow
+
+View definitions live in `SQL/views` and data-quality assertions live in `SQL/tests`. For pull requests into `staging`, CI creates an isolated Snowflake schema, runs every view file alphabetically, and then runs every test. A test passes when it returns zero rows.
+
+After SQL validation passes, the workflow comments on the pull request and asks the author to select two reviewers. On a production release, the same view files are applied to `CDE_ECOMMERCE.ANALYTICS` with a restricted deployment service account.
