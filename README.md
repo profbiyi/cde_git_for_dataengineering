@@ -37,6 +37,12 @@ Open a pull request from the feature branch into `staging`. The pull request mus
 
 Production releases use a separate pull request from `staging` into `main`.
 
+## Production releases
+
+Every Tuesday at 10:00 in the `Europe/Paris` timezone, GitHub Actions automatically merges `staging` into `main`. If production already contains every staging commit, the workflow exits without creating an empty release commit.
+
+The repository owner, `profbiyi`, may also open a `staging` to `main` pull request at any time and merge it without approvals. Other contributors cannot bypass the production rules.
+
 ## Rules
 
 - Never push directly to `staging` or `main`.
