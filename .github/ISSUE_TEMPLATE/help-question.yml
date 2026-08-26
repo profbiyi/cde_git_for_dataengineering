@@ -1,0 +1,60 @@
+name: "🙋 Help—I am stuck"
+description: Ask for help with Git, GitHub, a pull request, CI, or SQL
+title: "[Help] "
+labels:
+  - question
+  - beginner-friendly
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Getting stuck is part of learning. Show us where you are and somebody can help you take the next step.
+
+  - type: dropdown
+    id: stage
+    attributes:
+      label: Where are you stuck?
+      options:
+        - Cloning the repository
+        - Creating or switching branches
+        - Staging or committing changes
+        - Pushing my branch
+        - Opening a pull request
+        - Requesting or giving a review
+        - Snowflake CI failed
+        - Writing the SQL
+        - Something else
+    validations:
+      required: true
+
+  - type: textarea
+    id: goal
+    attributes:
+      label: What are you trying to do?
+      placeholder: I am trying to push my new branch to GitHub.
+    validations:
+      required: true
+
+  - type: textarea
+    id: tried
+    attributes:
+      label: What have you tried?
+      description: Include the commands you ran or buttons you clicked.
+      placeholder: I ran git status, then git push.
+    validations:
+      required: true
+
+  - type: textarea
+    id: output
+    attributes:
+      label: What did Git, GitHub, or CI show you?
+      description: Paste the exact message or add a screenshot. Remove secrets first.
+      render: shell
+
+  - type: checkboxes
+    id: safety
+    attributes:
+      label: Safety check
+      options:
+        - label: I removed passwords, tokens, private keys, and other secrets.
+          required: true
