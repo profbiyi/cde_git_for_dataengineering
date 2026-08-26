@@ -1,9 +1,5 @@
-.DS_Store
-.env
 .venv/
-venv/
+.local/
+*.duckdb
+*.duckdb.wal
 __pycache__/
-*.py[cod]
-.pytest_cache/
-.idea/
-.vscode/
