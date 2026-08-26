@@ -58,24 +58,3 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) for the complete workflow.
 View definitions live in `SQL/views` and data-quality assertions live in `SQL/tests`. For pull requests into `staging`, CI creates an isolated Snowflake schema, runs every view file alphabetically, and then runs every test. A test passes when it returns zero rows.
 
 After SQL validation passes, the workflow comments on the pull request and asks the author to select two reviewers. On a production release, the same view files are applied to `CDE_ECOMMERCE.ANALYTICS` with a restricted deployment service account.
-
-## Test SQL locally with DuckDB
-
-Students can validate the same views and data-quality tests before pushing. The local runner creates a disposable ecommerce database in memory, so it needs no Snowflake credentials and leaves no database file behind.
-
-```bash
-python3 -m venv .venv
-source .venv/bin/activate             # Windows: .venv\\Scripts\\activate
-python -m pip install -r requirements-local.txt
-python scripts/test_sql_locally.py
-```
-
-A successful run ends with `Local DuckDB SQL validation passed`.
-
-To keep an inspectable database instead, run:
-
-```bash
-python scripts/test_sql_locally.py --database .local/cde_training.duckdb
-```
-
-DuckDB catches syntax errors, missing tables or columns, and failing zero-row quality tests quickly. Snowflake CI remains the authoritative check because some Snowflake-specific SQL features do not exist in DuckDB.

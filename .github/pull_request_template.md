@@ -9,5 +9,4 @@
 ## Checklist
 
 - [ ] I reviewed my changes.
-- [ ] I ran `python scripts/test_sql_locally.py` for SQL changes.
 - [ ] I selected two reviewers.
