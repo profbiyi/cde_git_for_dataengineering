@@ -1,0 +1,69 @@
+name: "🧩 SQL task"
+description: Suggest a query, view, data check, or small data-engineering task
+title: "[SQL] "
+labels:
+  - sql-task
+  - beginner-friendly
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for suggesting some work! Keep it simple: explain the question the SQL should answer. You do not need to know the final query yet.
+
+  - type: input
+    id: goal
+    attributes:
+      label: What should we build?
+      description: Write one short sentence describing the task.
+      placeholder: Create a view showing daily revenue by country.
+    validations:
+      required: true
+
+  - type: textarea
+    id: reason
+    attributes:
+      label: Why is this useful?
+      description: What business or data question will this answer?
+      placeholder: The sales team wants to compare revenue across countries each day.
+    validations:
+      required: true
+
+  - type: input
+    id: source_tables
+    attributes:
+      label: Which tables might be needed?
+      description: It is okay to write "I am not sure."
+      placeholder: CUSTOMERS, ORDERS, and ORDER_ITEMS
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected_result
+    attributes:
+      label: What should the result look like?
+      description: List the expected columns or give a tiny example.
+      placeholder: One row per date and country, with order_count and revenue columns.
+    validations:
+      required: true
+
+  - type: textarea
+    id: done_when
+    attributes:
+      label: We will know this is done when...
+      description: Add two or three simple checks.
+      placeholder: |
+        - The view runs successfully.
+        - Cancelled orders are excluded.
+        - Revenue is never negative.
+    validations:
+      required: true
+
+  - type: checkboxes
+    id: safety
+    attributes:
+      label: Quick check
+      options:
+        - label: I searched existing issues to avoid creating a duplicate.
+          required: true
+        - label: I did not include a password, token, private key, or other secret.
+          required: true

@@ -1,0 +1,69 @@
+name: "🐛 Something is not working"
+description: Report a Git, GitHub, SQL, CI, or repository problem
+title: "[Bug] "
+labels:
+  - bug
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Bugs happen—your report helps us fix them. Describe what you saw in your own words; perfect technical language is not required.
+
+  - type: dropdown
+    id: area
+    attributes:
+      label: Where did the problem happen?
+      options:
+        - Git on my computer
+        - GitHub website
+        - Pull request or review
+        - Snowflake SQL validation
+        - SQL query or view
+        - Somewhere else
+    validations:
+      required: true
+
+  - type: textarea
+    id: happened
+    attributes:
+      label: What happened?
+      placeholder: Tell us what you tried and what went wrong.
+    validations:
+      required: true
+
+  - type: textarea
+    id: steps
+    attributes:
+      label: How can someone reproduce it?
+      description: List the commands or clicks in order.
+      placeholder: |
+        1. I switched to my feature branch.
+        2. I ran git push.
+        3. Git displayed an error.
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: What did you expect instead?
+      placeholder: I expected my branch to appear on GitHub.
+    validations:
+      required: true
+
+  - type: textarea
+    id: error
+    attributes:
+      label: Error message or screenshot
+      description: Paste the complete error or drag in a screenshot. Remove passwords, tokens, and private information first.
+      render: shell
+
+  - type: checkboxes
+    id: safety
+    attributes:
+      label: Quick check
+      options:
+        - label: I searched existing issues to see whether this was already reported.
+          required: true
+        - label: I removed passwords, tokens, private keys, and other secrets.
+          required: true

@@ -1,0 +1,5 @@
+blank_issues_enabled: false
+contact_links:
+  - name: "📘 Read the class guide"
+    url: https://github.com/profbiyi/cde_git_for_dataengineering#readme
+    about: Review the Git workflow and repository rules before starting.
