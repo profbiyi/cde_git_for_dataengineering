@@ -16,7 +16,15 @@ concurrency:
 jobs:
   promote-staging:
     name: Promote staging to main
-    if: github.event_name == 'schedule' || github.actor == 'profbiyi'
+    # Scheduled releases run automatically once. Any manual run or re-run must
+    # be initiated by profbiyi; github.actor alone is unsafe for re-runs because
+    # it remains the actor from the original run.
+    if: >-
+      (github.event_name == 'schedule' &&
+       (github.run_attempt == 1 || github.triggering_actor == 'profbiyi')) ||
+      (github.event_name == 'workflow_dispatch' &&
+       github.actor == 'profbiyi' &&
+       github.triggering_actor == 'profbiyi')
     runs-on: ubuntu-latest
     timeout-minutes: 10
 
