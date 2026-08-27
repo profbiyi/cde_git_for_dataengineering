@@ -4,11 +4,6 @@ on:
   pull_request:
     branches:
       - staging
-    paths:
-      - "SQL/**"
-      - "scripts/run_snowflake_sql.py"
-      - "requirements-ci.txt"
-      - ".github/workflows/sql-validation.yml"
 
 permissions:
   contents: read
