@@ -33,6 +33,7 @@ git commit -m "Describe the change"
 git push -u origin feature/my-change
 ```
 
+
 Open a pull request from the feature branch into `staging`. The pull request must receive two approvals before it can be merged.
 
 Production releases use a separate pull request from `staging` into `main`.
