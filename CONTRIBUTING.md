@@ -37,5 +37,3 @@ git push -u origin feature/short-description
 ```
 
 Set the pull request base branch to `staging`. A pull request needs two approvals and all conversations must be resolved before merging.
-
-Thank you
