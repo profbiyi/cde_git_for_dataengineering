@@ -38,6 +38,4 @@ git push -u origin feature/short-description
 
 Set the pull request base branch to `staging`. A pull request needs two approvals and all conversations must be resolved before merging.
 
-## 5. Release to production
-
-After changes have been tested on `staging`, open a pull request from `staging` to `main`. Do not push or merge feature branches directly into `main`.
+Thank you
