@@ -1,1 +1,1 @@
-snowflake-connector-python==4.7.2
+psycopg[binary]>=3.2,<4

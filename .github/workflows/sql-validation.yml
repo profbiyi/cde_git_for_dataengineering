@@ -2,50 +2,33 @@ name: SQL validation
 
 on:
   pull_request:
-    branches:
-      - staging
+    branches: [staging]
 
 permissions:
   contents: read
-  pull-requests: write
 
+# One hosted validation at a time keeps the free database connection load low.
 concurrency:
-  group: sql-validation-${{ github.event.pull_request.number }}
-  cancel-in-progress: true
+  group: hosted-postgres-validation
+  cancel-in-progress: false
 
 jobs:
   validate-sql:
-    name: Validate Snowflake SQL
+    name: Validate PostgreSQL SQL
     runs-on: ubuntu-latest
     timeout-minutes: 15
+    # Fork PRs have no repository secrets. Instructor must review/import them.
+    if: github.event.pull_request.head.repo.full_name == github.repository
     env:
-      SNOWFLAKE_ACCOUNT: ${{ vars.SNOWFLAKE_ACCOUNT }}
-      SNOWFLAKE_DATABASE: ${{ vars.SNOWFLAKE_DATABASE }}
-      SNOWFLAKE_WAREHOUSE: ${{ vars.SNOWFLAKE_WAREHOUSE }}
-      SNOWFLAKE_USER: ${{ vars.SNOWFLAKE_CI_USER }}
-      SNOWFLAKE_ROLE: ${{ vars.SNOWFLAKE_CI_ROLE }}
-      SNOWFLAKE_PRIVATE_KEY: ${{ secrets.SNOWFLAKE_CI_PRIVATE_KEY }}
-      CI_SCHEMA: CI_PR_${{ github.event.pull_request.number }}_${{ github.run_attempt }}
-
+      DATABASE_URL: ${{ secrets.POSTGRES_CI_URL }}
+      CI_SCHEMA: ci_pr_${{ github.event.pull_request.number }}_${{ github.run_id }}_${{ github.run_attempt }}
     steps:
       - uses: actions/checkout@v6
-
       - uses: actions/setup-python@v6
         with:
-          python-version: "3.12"
+          python-version: '3.12'
           cache: pip
           cache-dependency-path: requirements-ci.txt
-
-      - name: Install Snowflake client
-        run: pip install -r requirements-ci.txt
-
-      - name: Validate all SQL views and tests
-        run: python scripts/run_snowflake_sql.py validate
-
-      - name: Tell the author to choose reviewers
-        if: success()
-        env:
-          GH_TOKEN: ${{ github.token }}
-        run: |
-          gh pr comment "${{ github.event.pull_request.number }}" \
-            --body "✅ Snowflake SQL validation passed. Please select two reviewers."
+      - run: pip install -r requirements-ci.txt
+      - name: Build views and run data tests in a temporary schema
+        run: python scripts/run_postgres_sql.py validate
